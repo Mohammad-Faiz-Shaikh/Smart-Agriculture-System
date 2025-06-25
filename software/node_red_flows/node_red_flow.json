@@ -1,0 +1,91 @@
+[
+  {
+    "id": "a1",
+    "type": "ibmiot in",
+    "z": "flow1",
+    "authType": "d",
+    "deviceType": "iotdevice1",
+    "deviceId": "qwerty123",
+    "event": "status",
+    "command": "event",
+    "format": "json",
+    "name": "IBM IoT In",
+    "service": "registered",
+    "x": 100,
+    "y": 100,
+    "wires": [["temp"], ["humid"]]
+  },
+  {
+    "id": "temp",
+    "type": "function",
+    "z": "flow1",
+    "name": "Get Temp",
+    "func": "msg.payload = msg.payload.d.temperature;\nreturn msg;",
+    "x": 300,
+    "y": 80,
+    "wires": [["tempgauge"]]
+  },
+  {
+    "id": "humid",
+    "type": "function",
+    "z": "flow1",
+    "name": "Get Humidity",
+    "func": "msg.payload = msg.payload.d.humidity;\nreturn msg;",
+    "x": 300,
+    "y": 120,
+    "wires": [["humidgauge"]]
+  },
+  {
+    "id": "tempgauge",
+    "type": "ui_gauge",
+    "z": "flow1",
+    "name": "Temperature",
+    "group": "group1",
+    "order": 1,
+    "width": 6,
+    "height": 3,
+    "gtype": "gage",
+    "title": "Temperature (°C)",
+    "label": "°C",
+    "format": "{{value}}",
+    "min": 0,
+    "max": 100,
+    "x": 500,
+    "y": 80,
+    "wires": []
+  },
+  {
+    "id": "humidgauge",
+    "type": "ui_gauge",
+    "z": "flow1",
+    "name": "Humidity",
+    "group": "group1",
+    "order": 2,
+    "width": 6,
+    "height": 3,
+    "gtype": "gage",
+    "title": "Humidity (%)",
+    "label": "%",
+    "format": "{{value}}",
+    "min": 0,
+    "max": 100,
+    "x": 500,
+    "y": 120,
+    "wires": []
+  },
+  {
+    "id": "group1",
+    "type": "ui_group",
+    "name": "Monitoring",
+    "tab": "tab1",
+    "order": 1,
+    "disp": true,
+    "width": 12
+  },
+  {
+    "id": "tab1",
+    "type": "ui_tab",
+    "name": "Smart Farm",
+    "icon": "dashboard"
+  }
+]

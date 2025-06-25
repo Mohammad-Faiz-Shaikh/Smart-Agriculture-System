@@ -1,0 +1,91 @@
+[
+  {
+    "id": "inject_moisture",
+    "type": "inject",
+    "z": "flow1",
+    "name": "Simulate Moisture",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "5",
+    "crontab": "",
+    "once": true,
+    "onceDelay": "1",
+    "x": 150,
+    "y": 120,
+    "wires": [
+      [
+        "random_moisture"
+      ]
+    ]
+  },
+  {
+    "id": "random_moisture",
+    "type": "function",
+    "z": "flow1",
+    "name": "Random Moisture %",
+    "func": "msg.payload = Math.floor(Math.random() * 100);\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 350,
+    "y": 120,
+    "wires": [
+      [
+        "check_moisture"
+      ]
+    ]
+  },
+  {
+    "id": "check_moisture",
+    "type": "function",
+    "z": "flow1",
+    "name": "If \u226575% \u2192 OFF",
+    "func": "if (msg.payload >= 75) {\n    node.status({fill:\"red\",shape:\"ring\",text:\"Moisture: \" + msg.payload + \"% \u2192 Motor OFF\"});\n    return { payload: \"OFF\" };\n} else {\n    node.status({fill:\"green\",shape:\"dot\",text:\"Moisture: \" + msg.payload + \"%\"});\n    return null;\n}",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 580,
+    "y": 120,
+    "wires": [
+      [
+        "mqtt_out"
+      ]
+    ]
+  },
+  {
+    "id": "mqtt_out",
+    "type": "mqtt out",
+    "z": "flow1",
+    "name": "Send to HiveMQ",
+    "topic": "smartfarm/motor",
+    "qos": "0",
+    "retain": "false",
+    "broker": "mqtt_broker",
+    "x": 810,
+    "y": 120,
+    "wires": []
+  },
+  {
+    "id": "mqtt_broker",
+    "type": "mqtt-broker",
+    "name": "HiveMQ Broker",
+    "broker": "broker.hivemq.com",
+    "port": "1883",
+    "clientid": "",
+    "usetls": false,
+    "protocolVersion": "4",
+    "keepalive": "60",
+    "cleansession": true,
+    "birthTopic": "",
+    "birthQos": "0",
+    "birthPayload": "",
+    "closeTopic": "",
+    "closePayload": "",
+    "willTopic": "",
+    "willQos": "0",
+    "willPayload": ""
+  }
+]

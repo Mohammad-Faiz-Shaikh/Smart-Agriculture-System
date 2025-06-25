@@ -1,0 +1,137 @@
+[
+  {
+    "id": "mqtt_in",
+    "type": "mqtt in",
+    "z": "flow1",
+    "name": "HiveMQ MQTT In",
+    "topic": "smart/agriculture/data",
+    "qos": "2",
+    "datatype": "json",
+    "broker": "mqtt_broker_config",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "x": 100,
+    "y": 100,
+    "wires": [
+      [
+        "temp"
+      ],
+      [
+        "humid"
+      ]
+    ]
+  },
+  {
+    "id": "temp",
+    "type": "function",
+    "z": "flow1",
+    "name": "Get Temp",
+    "func": "msg.payload = msg.payload.d.temperature;\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 300,
+    "y": 80,
+    "wires": [
+      [
+        "tempgauge"
+      ]
+    ]
+  },
+  {
+    "id": "humid",
+    "type": "function",
+    "z": "flow1",
+    "name": "Get Humidity",
+    "func": "msg.payload = msg.payload.d.humidity;\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 300,
+    "y": 120,
+    "wires": [
+      [
+        "humidgauge"
+      ]
+    ]
+  },
+  {
+    "id": "tempgauge",
+    "type": "ui_gauge",
+    "z": "flow1",
+    "name": "Temperature",
+    "group": "group1",
+    "order": 1,
+    "width": 6,
+    "height": 3,
+    "gtype": "gage",
+    "title": "Temperature (\u00b0C)",
+    "label": "\u00b0C",
+    "format": "{{value}}",
+    "min": 0,
+    "max": 100,
+    "x": 500,
+    "y": 80,
+    "wires": []
+  },
+  {
+    "id": "humidgauge",
+    "type": "ui_gauge",
+    "z": "flow1",
+    "name": "Humidity",
+    "group": "group1",
+    "order": 2,
+    "width": 6,
+    "height": 3,
+    "gtype": "gage",
+    "title": "Humidity (%)",
+    "label": "%",
+    "format": "{{value}}",
+    "min": 0,
+    "max": 100,
+    "x": 500,
+    "y": 120,
+    "wires": []
+  },
+  {
+    "id": "mqtt_broker_config",
+    "type": "mqtt-broker",
+    "name": "HiveMQ Broker",
+    "broker": "your-cluster.hivemq.cloud",
+    "port": "8883",
+    "tls": true,
+    "clientid": "",
+    "usetls": true,
+    "compatmode": false,
+    "keepalive": "60",
+    "cleansession": true,
+    "birthTopic": "",
+    "birthQos": "0",
+    "birthPayload": "",
+    "closeTopic": "",
+    "closePayload": "",
+    "willTopic": "",
+    "willQos": "0",
+    "willPayload": "",
+    "credentials": {
+      "user": "your-username",
+      "password": "your-password"
+    }
+  },
+  {
+    "id": "group1",
+    "type": "ui_group",
+    "name": "Monitoring",
+    "tab": "tab1",
+    "order": 1,
+    "disp": true,
+    "width": 12,
+    "collapse": false
+  },
+  {
+    "id": "tab1",
+    "type": "ui_tab",
+    "name": "Smart Farm",
+    "icon": "dashboard",
+    "order": 1
+  }
+]
